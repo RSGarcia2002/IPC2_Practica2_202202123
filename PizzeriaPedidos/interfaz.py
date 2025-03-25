@@ -24,6 +24,7 @@ class App:
         tk.Button(frame, text="Nueva Orden", width=25, command=self.nueva_orden).pack(pady=5)
         tk.Button(frame, text="Entregar Orden", width=25, command=self.entregar_orden).pack(pady=5)
         tk.Button(frame, text="Ver Cola de Pedidos", width=25, command=self.ver_cola).pack(pady=5)
+        tk.Button(frame, text="Ver Siguiente Orden", width=25, command=self.ver_orden).pack(pady=5)
         tk.Button(frame, text="Salir", width=25, command=self.root.quit).pack(pady=5)
 
     def nueva_orden(self):
@@ -111,6 +112,18 @@ class App:
         lbl = tk.Label(ventana, image=foto)
         lbl.image = foto
         lbl.pack()
+
+    def ver_orden(self):
+        if self.cola.esta_vacia():
+            messagebox.showinfo("Cola Vacía", "No hay órdenes en espera.")
+            return
+
+        orden = self.cola.ver_primero()
+        detalle = str(orden)
+        espera = sum(o.tiempo_total_orden() for o in self.cola if o != orden)
+        detalle += f"Tiempo de espera en cola: {espera} minutos"
+
+        messagebox.showinfo("Siguiente Orden", detalle)
 
 # Punto de entrada
 if __name__ == "__main__":
